@@ -2383,16 +2383,24 @@ install_script() {
 
   NEXTID=$(pvesh get /cluster/nextid)
 
-  # Get timezone using timedatectl (Debian 13+ compatible)
-  # Fallback to /etc/timezone for older systems
-  if command -v timedatectl >/dev/null 2>&1; then
-    timezone=$(timedatectl show --value --property=Timezone 2>/dev/null || echo "UTC")
-  elif [ -f /etc/timezone ]; then
-   # timezone=$(cat /etc/timezone)
- # else
-    timezone="UTC"
-  fi
-  [[ "${timezone:-}" == Etc/* ]] && timezone="host" # pct doesn't accept Etc/* zones
+# Get timezone (systemd / Debian 13)
+if command -v timedatectl >/dev/null 2>&1; then
+  timezone=$(timedatectl show -p Timezone --value 2>/dev/null)
+fi
+
+# Fallback: derive from /etc/localtime symlink (works in LXC)
+if [ -z "${timezone:-}" ] && [ -L /etc/localtime ]; then
+  timezone=$(readlink /etc/localtime | sed 's|.*/zoneinfo/||')
+fi
+
+# Last resort
+timezone=${timezone:-UTC}
+
+# Proxmox pct doesn't accept Etc/*
+case "$timezone" in
+  Etc/*) timezone="host" ;;
+esac
+
 
   # Show APP Header
   header_info
