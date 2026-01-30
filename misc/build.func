@@ -2388,8 +2388,8 @@ install_script() {
   if command -v timedatectl >/dev/null 2>&1; then
     timezone=$(timedatectl show --value --property=Timezone 2>/dev/null || echo "UTC")
   elif [ -f /etc/timezone ]; then
-    timezone=$(cat /etc/timezone)
-  else
+   # timezone=$(cat /etc/timezone)
+ # else
     timezone="UTC"
   fi
   [[ "${timezone:-}" == Etc/* ]] && timezone="host" # pct doesn't accept Etc/* zones
