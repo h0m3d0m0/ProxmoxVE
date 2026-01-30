@@ -841,7 +841,7 @@ var_keyctl=0           # Allow keyctl() - needed for Docker (systemd-networkd wo
 var_mknod=0            # Allow device node creation (requires kernel 5.3+, experimental)
 var_mount_fs=          # Allow specific filesystems: nfs,fuse,ext4,etc (leave empty for defaults)
 var_protection=no      # Prevent accidental deletion of container
-var_timezone=          # Container timezone (e.g. Europe/Berlin, leave empty for host timezone)
+var_timezone=Europe/Brussel       # Container timezone (e.g. Europe/Berlin, leave empty for host timezone)
 var_tags=community-script
 var_verbose=no
 
